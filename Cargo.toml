@@ -1,0 +1,10 @@
+[package]
+name = "my-postgres-utils"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio-postgres = { version = "*", features = ["with-chrono-0_4"] }
+rust-extensions = { branch = "main", git = "https://github.com/MyJetTools/rust-extensions.git" }
