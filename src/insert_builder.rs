@@ -32,10 +32,9 @@ impl<'s> PosrgresInsertBuilder<'s> {
         self.value_no += 1;
     }
 
-    pub fn append_date_time_field(&mut self, field_name: &str, value: DateTimeAsMicroseconds) {
+    pub fn append_field_raw(&mut self, field_name: &str, value: &str) {
         self.fields.add(field_name);
-        self.values
-            .add(format!("'{}'", value.to_rfc3339().as_str()).as_str());
+        self.values.add(format!("'{}'", value).as_str());
     }
 
     pub fn get_sql_line(&self, table_name: &str) -> String {
