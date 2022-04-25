@@ -1,6 +1,6 @@
 use crate::{sql_line_builder::SqlLineBuilder, NumberedParams};
 
-pub struct PosrgresInsertOrUpdate<'s> {
+pub struct PosrgresInsertOrUpdateBuilder<'s> {
     insert_fields: SqlLineBuilder,
     insert_values: SqlLineBuilder,
     update_fields: SqlLineBuilder,
@@ -11,7 +11,7 @@ pub struct PosrgresInsertOrUpdate<'s> {
     values_data: Vec<&'s (dyn tokio_postgres::types::ToSql + Sync)>,
 }
 
-impl<'s> PosrgresInsertOrUpdate<'s> {
+impl<'s> PosrgresInsertOrUpdateBuilder<'s> {
     pub fn new() -> Self {
         Self {
             insert_fields: SqlLineBuilder::new(" , ".to_string()),
