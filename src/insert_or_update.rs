@@ -28,10 +28,14 @@ impl<'s> PosrgresInsertOrUpdate<'s> {
         field_name: &str,
         value: &'s (dyn tokio_postgres::types::ToSql + Sync),
     ) {
-        let param_no = self.numbered_params.add_or_get(field_name);
+        let (param_no, exists) = self.numbered_params.add_or_get(field_name);
         self.insert_fields.add(field_name);
         self.insert_values.add(format!("${}", param_no).as_str());
         self.values_data.push(value);
+
+        if !exists {
+            self.values_data.push(value);
+        }
     }
 
     pub fn append_insert_field_raw(&mut self, field_name: &str, value: &str) {
@@ -44,10 +48,13 @@ impl<'s> PosrgresInsertOrUpdate<'s> {
         field_name: &str,
         value: &'s (dyn tokio_postgres::types::ToSql + Sync),
     ) {
-        let param_no = self.numbered_params.add_or_get(field_name);
+        let (param_no, exists) = self.numbered_params.add_or_get(field_name);
         self.update_fields.add(field_name);
         self.update_values.add(format!("${}", param_no).as_str());
-        self.values_data.push(value);
+
+        if !exists {
+            self.values_data.push(value);
+        }
     }
 
     pub fn append_update_field_raw(&mut self, field_name: &str, value: &str) {
