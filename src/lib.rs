@@ -2,6 +2,7 @@ mod bulk_insert_builder;
 mod insert_builder;
 mod insert_or_update;
 mod numbered_params;
+
 mod sql_line_builder;
 mod update_builder;
 pub use bulk_insert_builder::BulkInsertBuilder;
