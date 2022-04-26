@@ -51,7 +51,7 @@ impl<'s> BulkInsertBuilder<'s> {
         }
     }
 
-    pub fn build(&mut self, table_name: &str) -> String {
+    pub fn get_sql_line(&mut self, table_name: &str) -> String {
         let mut new_line = None;
 
         std::mem::swap(&mut self.current_value, &mut new_line);
@@ -72,5 +72,9 @@ impl<'s> BulkInsertBuilder<'s> {
         }
 
         result
+    }
+
+    pub fn get_values_data(&'s self) -> &'s [&'s (dyn tokio_postgres::types::ToSql + Sync)] {
+        &self.values_data
     }
 }
