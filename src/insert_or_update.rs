@@ -7,16 +7,11 @@ pub struct PosrgresInsertOrUpdateBuilder {
     update_values: SqlLineBuilder,
 
     numbered_params: NumberedParams,
-
-    table_name: String,
-    pk_name: String,
 }
 
 impl PosrgresInsertOrUpdateBuilder {
-    pub fn new(table_name: String, pk_name: String) -> Self {
+    pub fn new() -> Self {
         Self {
-            table_name,
-            pk_name,
             insert_fields: SqlLineBuilder::new(" , ".to_string()),
             insert_values: SqlLineBuilder::new(" , ".to_string()),
             update_fields: SqlLineBuilder::new(" , ".to_string()),
@@ -50,11 +45,9 @@ impl PosrgresInsertOrUpdateBuilder {
         self.update_values.add(format!("'{}'", value).as_str());
     }
 
-    pub fn get_sql_line(&self) -> String {
+    pub fn get_sql_line(&self, table_name: &str, pk_name: &str) -> String {
         format!(
             "INSERT INTO {table_name} {insert_fields} VALUES {insert_values} ON CONFLICT ON CONSTRAINT {pk_name} DO UPDATE SET ({udpate_fields}) = ({update_values})",
-            table_name = self.table_name,
-            pk_name = self.pk_name,
             insert_fields = self.insert_fields.as_str(),
             insert_values = self.insert_values.as_str(),
             udpate_fields = self.update_fields.as_str(),
