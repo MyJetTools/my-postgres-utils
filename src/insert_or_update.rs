@@ -21,7 +21,7 @@ impl PosrgresInsertOrUpdateBuilder {
         }
     }
 
-    pub fn append_insert_field<'s>(&'s mut self, field_name: &str) -> bool {
+    pub fn append_insert_field(&mut self, field_name: &str) -> bool {
         let (param_no, exists) = self.numbered_params.add_or_get(field_name);
         self.insert_fields.add(field_name);
         self.insert_values.add(format!("${}", param_no).as_str());
@@ -29,6 +29,11 @@ impl PosrgresInsertOrUpdateBuilder {
     }
 
     pub fn append_insert_field_raw(&mut self, field_name: &str, value: &str) {
+        self.insert_fields.add(field_name);
+        self.insert_values.add(format!("'{}'", value).as_str());
+    }
+
+    pub fn append_insert_field_raw_no_quotes(&mut self, field_name: &str, value: &str) {
         self.insert_fields.add(field_name);
         self.insert_values.add(format!("'{}'", value).as_str());
     }
