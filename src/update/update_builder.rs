@@ -1,13 +1,13 @@
 use crate::{NumberedParams, SqlLineBuilder, SqlValue, WhereBuilder};
 
-pub struct PosrgresUpdateBuilder<'s> {
+pub struct UpdateBuilder<'s> {
     fields: SqlLineBuilder,
     values: SqlLineBuilder,
     where_clause: WhereBuilder,
     numbered_params: NumberedParams<'s>,
 }
 
-impl<'s> PosrgresUpdateBuilder<'s> {
+impl<'s> UpdateBuilder<'s> {
     pub fn new() -> Self {
         Self {
             fields: SqlLineBuilder::new(','),

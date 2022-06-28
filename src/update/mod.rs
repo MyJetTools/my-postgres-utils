@@ -1,2 +1,2 @@
 mod update_builder;
-pub use update_builder::PosrgresUpdateBuilder;
+pub use update_builder::UpdateBuilder;
