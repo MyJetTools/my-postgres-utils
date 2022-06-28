@@ -22,10 +22,13 @@ impl PosrgresInsertOrUpdateBuilder {
     }
 
     pub fn append_insert_field(&mut self, field_name: &str) -> bool {
+        /*
         let (param_no, exists) = self.numbered_params.add_or_get(field_name);
         self.insert_fields.add(field_name);
         self.insert_values.add(format!("${}", param_no).as_str());
         exists
+         */
+        todo!("Implement");
     }
 
     pub fn append_insert_field_raw(&mut self, field_name: &str, value: &str) {
@@ -39,10 +42,13 @@ impl PosrgresInsertOrUpdateBuilder {
     }
 
     pub fn append_update_field(&mut self, field_name: &str) -> bool {
-        let (param_no, exists) = self.numbered_params.add_or_get(field_name);
-        self.update_fields.add(field_name);
-        self.update_values.add(format!("${}", param_no).as_str());
-        exists
+        /*
+               let (param_no, exists) = self.numbered_params.add_or_get(field_name);
+               self.update_fields.add(field_name);
+               self.update_values.add(format!("${}", param_no).as_str());
+               exists
+        */
+        todo!("Implement");
     }
 
     pub fn append_update_field_raw(&mut self, field_name: &str, value: &str) {

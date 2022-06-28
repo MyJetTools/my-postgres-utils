@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 
+use crate::SqlValue;
+
 pub struct NumberedParams {
-    params: HashMap<String, i32>,
-    param_no: i32,
+    params: HashMap<String, u32>,
+    param_no: u32,
 }
 
 impl NumberedParams {
@@ -13,14 +15,20 @@ impl NumberedParams {
         }
     }
 
-    pub fn add_or_get(&mut self, name: &str) -> (i32, bool) {
-        let mut exists = true;
-        if !self.params.contains_key(name) {
-            self.params.insert(name.to_string(), self.param_no);
-            self.param_no += 1;
-            exists = false;
+    pub fn add_or_get(&mut self, sql_value: &SqlValue) -> Option<u32> {
+        if let SqlValue::String(value) = sql_value {
+            let mut exists = true;
+
+            if !self.params.contains_key(value) {
+                let result = self.param_no;
+                self.params.insert(value.to_string(), result);
+                self.param_no += 1;
+                return Some(result);
+            }
+
+            return Some(*self.params.get(value).unwrap());
         }
 
-        return (self.params.get(name).unwrap().clone(), exists);
+        None
     }
 }
