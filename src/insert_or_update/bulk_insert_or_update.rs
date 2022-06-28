@@ -1,4 +1,4 @@
-use crate::{sql_line_builder::SqlLineBuilder, NumberedParams, SqlValue};
+use crate::{NumberedParams, SqlValue};
 
 use super::InsertOrUpdateInner;
 
@@ -38,6 +38,11 @@ impl<'s> BulkInsertOrUpdateBuilder<'s> {
 
         for line in &self.lines {
             line.build(&mut result, table_name, pk_name);
+            result.push(';');
+        }
+
+        if self.current.has_value {
+            self.current.build(&mut result, table_name, pk_name);
             result.push(';');
         }
 
