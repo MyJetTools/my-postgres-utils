@@ -17,7 +17,7 @@ impl<'s> BulkDeleteBuilder<'s> {
         }
     }
 
-    pub fn add_new_line(&'s mut self) {
+    pub fn add_new_line(&mut self) {
         let old_value = std::mem::replace(&mut self.current, DeleteInner::new());
         if old_value.has_value {
             self.inners.push(old_value);
