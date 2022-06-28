@@ -34,6 +34,17 @@ impl SqlLineBuilder {
             .push_str(sql_value.as_sql_value_to_injext().as_str());
     }
 
+    pub fn add_update(&mut self, field_name: &str, sql_value: &SqlValue) {
+        if self.result.len() > 0 {
+            self.result.push(self.separator);
+        }
+
+        self.result.push_str(field_name);
+        self.result.push('=');
+        self.result
+            .push_str(sql_value.as_sql_value_to_injext().as_str());
+    }
+
     pub fn as_str(&self) -> &str {
         self.result.as_str()
     }

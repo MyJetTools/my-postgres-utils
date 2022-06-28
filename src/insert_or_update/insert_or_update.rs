@@ -4,7 +4,7 @@ pub struct InsertOrUpdateBuilder<'s> {
     insert_fields: SqlLineBuilder,
     insert_values: SqlLineBuilder,
     update_fields: SqlLineBuilder,
-    update_values: SqlLineBuilder,
+
     numbered_params: NumberedParams<'s>,
 }
 
@@ -14,7 +14,6 @@ impl<'s> InsertOrUpdateBuilder<'s> {
             insert_fields: SqlLineBuilder::new(','),
             insert_values: SqlLineBuilder::new(','),
             update_fields: SqlLineBuilder::new(','),
-            update_values: SqlLineBuilder::new(','),
 
             numbered_params: NumberedParams::new(),
         }
@@ -27,8 +26,7 @@ impl<'s> InsertOrUpdateBuilder<'s> {
         self.insert_values.add_sql_value(&sql_value);
 
         if !is_primary_key {
-            self.update_fields.add(field_name);
-            self.update_values.add_sql_value(&sql_value);
+            self.update_fields.add_update(field_name, &sql_value);
         }
     }
 
@@ -43,11 +41,8 @@ impl<'s> InsertOrUpdateBuilder<'s> {
         result.push_str(self.insert_values.as_str());
         result.push_str(") ON CONFLICT ON CONSTRAINT ");
         result.push_str(pk_name);
-        result.push_str(" DO UPDATE SET (");
+        result.push_str(" DO UPDATE SET ");
         result.push_str(self.update_fields.as_str());
-        result.push_str(") = (");
-        result.push_str(self.update_values.as_str());
-        result.push_str(")");
 
         result
     }
