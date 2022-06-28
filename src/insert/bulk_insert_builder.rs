@@ -41,7 +41,7 @@ impl<'s> BulkInsertBuilder<'s> {
             fields = self.fields.as_str(),
         );
 
-        let no = 0;
+        let mut no = 0;
         for value in &self.values {
             if no > 0 {
                 result.push(',');
@@ -49,6 +49,7 @@ impl<'s> BulkInsertBuilder<'s> {
             result.push('(');
             result.push_str(value.as_str());
             result.push(')');
+            no += 1;
         }
 
         if self.current_value.has_value() {
