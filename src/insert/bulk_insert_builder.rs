@@ -1,13 +1,13 @@
 use crate::{sql_line_builder::SqlLineBuilder, NumberedParams, SqlValue};
 
-pub struct BulkInsertBuilder<'s> {
+pub struct PostgresBulkInsertBuilder<'s> {
     fields: SqlLineBuilder,
     values: Vec<SqlLineBuilder>,
     current_value: SqlLineBuilder,
     numbered_params: NumberedParams<'s>,
 }
 
-impl<'s> BulkInsertBuilder<'s> {
+impl<'s> PostgresBulkInsertBuilder<'s> {
     pub fn new() -> Self {
         Self {
             fields: SqlLineBuilder::new(','),
