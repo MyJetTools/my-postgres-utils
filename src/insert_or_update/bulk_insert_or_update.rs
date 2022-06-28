@@ -18,6 +18,9 @@ impl<'s> BulkInsertOrUpdateBuilder<'s> {
     }
 
     pub fn add_new_line(&mut self) {
+        if !self.current.has_value {
+            return;
+        }
         let old_value = std::mem::replace(&mut self.current, InsertOrUpdateInner::new());
         if old_value.has_value {
             self.lines.push(old_value);
