@@ -31,14 +31,21 @@ impl<'s> BulkDeleteBuilder<'s> {
 
     pub fn build(&mut self, table_name: &str) -> String {
         let mut result = String::new();
+
+        let mut no = 0;
+
+        result.push_str("DELETE FROM ");
+        result.push_str(table_name);
+
+        result.push_str(" WHERE ");
+
         for inner in &mut self.inners {
-            inner.build(table_name, &mut result);
-            result.push(';');
+            push_where(&mut result, no, inner);
+            no += 1;
         }
 
         if self.current.has_value {
-            self.current.build(table_name, &mut result);
-            result.push(';');
+            push_where(&mut result, no, &self.current);
         }
         result
     }
@@ -46,4 +53,13 @@ impl<'s> BulkDeleteBuilder<'s> {
     pub fn get_values_data(&'s mut self) -> &'s [&'s (dyn tokio_postgres::types::ToSql + Sync)] {
         self.numbered_params.build_params()
     }
+}
+
+fn push_where(dest: &mut String, no: usize, delete_inner: &DeleteInner) {
+    if no > 0 {
+        dest.push_str(" OR ");
+    }
+    dest.push('(');
+    delete_inner.build_where(dest);
+    dest.push(')');
 }

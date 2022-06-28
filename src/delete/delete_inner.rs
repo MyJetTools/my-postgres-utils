@@ -3,7 +3,7 @@ use crate::{NumberedParams, SqlValue, WhereBuilder};
 const AND_OPERATOR: &str = "AND";
 
 pub struct DeleteInner {
-    where_builder: WhereBuilder,
+    pub where_builder: WhereBuilder,
     pub has_value: bool,
 }
 
@@ -26,10 +26,14 @@ impl DeleteInner {
         self.has_value = true;
     }
 
+    pub fn build_where(&self, dest: &mut String) {
+        self.where_builder.build(dest);
+    }
+
     pub fn build(&mut self, table_name: &str, dest: &mut String) {
         dest.push_str("DELETE FROM ");
         dest.push_str(table_name);
         dest.push_str(" WHERE ");
-        self.where_builder.build(dest);
+        self.build_where(dest);
     }
 }
