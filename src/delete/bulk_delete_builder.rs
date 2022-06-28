@@ -29,7 +29,7 @@ impl<'s> BulkDeleteBuilder<'s> {
             .add_where_field(&mut self.numbered_params, field_name, sql_value);
     }
 
-    pub fn build(&'s mut self, table_name: &str) -> String {
+    pub fn build(&mut self, table_name: &str) -> String {
         let mut result = String::new();
         for inner in &mut self.inners {
             inner.build(table_name, &mut result);
