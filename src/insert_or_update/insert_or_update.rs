@@ -1,6 +1,6 @@
 use crate::{sql_line_builder::SqlLineBuilder, NumberedParams, SqlValue};
 
-pub struct PosrgresInsertOrUpdateBuilder<'s> {
+pub struct InsertOrUpdateBuilder<'s> {
     insert_fields: SqlLineBuilder,
     insert_values: SqlLineBuilder,
     update_fields: SqlLineBuilder,
@@ -8,7 +8,7 @@ pub struct PosrgresInsertOrUpdateBuilder<'s> {
     numbered_params: NumberedParams<'s>,
 }
 
-impl<'s> PosrgresInsertOrUpdateBuilder<'s> {
+impl<'s> InsertOrUpdateBuilder<'s> {
     pub fn new() -> Self {
         Self {
             insert_fields: SqlLineBuilder::new(','),
