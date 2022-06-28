@@ -32,7 +32,7 @@ impl<'s> InsertOrUpdateBuilder<'s> {
         }
     }
 
-    pub fn get_sql_line(&self, table_name: &str, pk_name: &str) -> String {
+    pub fn build(&self, table_name: &str, pk_name: &str) -> String {
         let mut result = String::new();
 
         result.push_str("INSERT INTO  ");
@@ -50,5 +50,9 @@ impl<'s> InsertOrUpdateBuilder<'s> {
         result.push_str(")");
 
         result
+    }
+
+    pub fn get_values_data(&mut self) -> &'s [&(dyn tokio_postgres::types::ToSql + Sync)] {
+        self.numbered_params.build_params()
     }
 }
