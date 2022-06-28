@@ -1,12 +1,12 @@
 use crate::{NumberedParams, SqlLineBuilder, SqlValue};
 
-pub struct PosrgresInsertBuilder<'s> {
+pub struct InsertBuilder<'s> {
     fields: SqlLineBuilder,
     values: SqlLineBuilder,
     numbered_params: NumberedParams<'s>,
 }
 
-impl<'s> PosrgresInsertBuilder<'s> {
+impl<'s> InsertBuilder<'s> {
     pub fn new() -> Self {
         Self {
             fields: SqlLineBuilder::new(','),
