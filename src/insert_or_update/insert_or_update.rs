@@ -20,18 +20,16 @@ impl<'s> InsertOrUpdateBuilder<'s> {
         }
     }
 
-    pub fn append_insert_field(&mut self, field_name: &str, sql_value: SqlValue) {
+    pub fn add_field(&mut self, field_name: &str, sql_value: SqlValue, is_primary_key: bool) {
         let sql_value = self.numbered_params.add_or_get(sql_value);
 
         self.insert_fields.add(field_name);
         self.insert_values.add_sql_value(&sql_value);
-    }
 
-    pub fn append_update_field(&mut self, field_name: &str, sql_value: SqlValue) {
-        let sql_value = self.numbered_params.add_or_get(sql_value);
-
-        self.update_fields.add(field_name);
-        self.update_values.add_sql_value(&sql_value);
+        if !is_primary_key {
+            self.update_fields.add(field_name);
+            self.update_values.add_sql_value(&sql_value);
+        }
     }
 
     pub fn get_sql_line(&self, table_name: &str, pk_name: &str) -> String {
