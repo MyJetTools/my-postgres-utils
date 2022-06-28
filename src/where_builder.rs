@@ -17,19 +17,19 @@ impl<'s> WhereBuilder<'s> {
         self.values.push((field_name.to_string(), value));
     }
 
-    pub fn build(&self) -> String {
-        let mut result = String::new();
+    pub fn build(&self, dest: &mut String) {
+        let mut number = 0;
         for (field_name, value) in &self.values {
-            if result.len() > 0 {
-                result.push(' ');
-                result.push_str(&self.operator);
-                result.push(' ');
+            if number > 0 {
+                dest.push(' ');
+                dest.push_str(&self.operator);
+                dest.push(' ');
             }
 
-            result.push_str(field_name.as_str());
-            result.push('=');
-            result.push_str(value.as_sql_value_to_injext().as_str());
+            dest.push_str(field_name.as_str());
+            dest.push('=');
+            dest.push_str(value.as_sql_value_to_injext().as_str());
+            number += 1;
         }
-        result
     }
 }
