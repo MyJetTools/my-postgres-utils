@@ -37,11 +37,11 @@ impl<'s> InsertOrUpdateBuilder<'s> {
 
         result.push_str("INSERT INTO  ");
         result.push_str(table_name);
-        result.push(' ');
+        result.push_str(" (");
         result.push_str(self.insert_fields.as_str());
-        result.push_str(" VALUES ");
+        result.push_str(") VALUES (");
         result.push_str(self.insert_values.as_str());
-        result.push_str(" ON CONFLICT ON CONSTRAINT ");
+        result.push_str(") ON CONFLICT ON CONSTRAINT ");
         result.push_str(pk_name);
         result.push_str(" DO UPDATE SET (");
         result.push_str(self.update_fields.as_str());
