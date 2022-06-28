@@ -9,8 +9,8 @@ pub struct PosrgresInsertBuilder<'s> {
 impl<'s> PosrgresInsertBuilder<'s> {
     pub fn new() -> Self {
         Self {
-            fields: SqlLineBuilder::new(" , ".to_string()),
-            values: SqlLineBuilder::new(" , ".to_string()),
+            fields: SqlLineBuilder::new(','),
+            values: SqlLineBuilder::new(','),
 
             numbered_params: NumberedParams::new(),
         }

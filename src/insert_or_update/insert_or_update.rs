@@ -11,10 +11,10 @@ pub struct PosrgresInsertOrUpdateBuilder<'s> {
 impl<'s> PosrgresInsertOrUpdateBuilder<'s> {
     pub fn new() -> Self {
         Self {
-            insert_fields: SqlLineBuilder::new(" , ".to_string()),
-            insert_values: SqlLineBuilder::new(" , ".to_string()),
-            update_fields: SqlLineBuilder::new(" , ".to_string()),
-            update_values: SqlLineBuilder::new(" , ".to_string()),
+            insert_fields: SqlLineBuilder::new(','),
+            insert_values: SqlLineBuilder::new(','),
+            update_fields: SqlLineBuilder::new(','),
+            update_values: SqlLineBuilder::new(','),
 
             numbered_params: NumberedParams::new(),
         }
@@ -35,12 +35,22 @@ impl<'s> PosrgresInsertOrUpdateBuilder<'s> {
     }
 
     pub fn get_sql_line(&self, table_name: &str, pk_name: &str) -> String {
-        format!(
-            "INSERT INTO {table_name} {insert_fields} VALUES {insert_values} ON CONFLICT ON CONSTRAINT {pk_name} DO UPDATE SET ({udpate_fields}) = ({update_values})",
-            insert_fields = self.insert_fields.as_str(),
-            insert_values = self.insert_values.as_str(),
-            udpate_fields = self.update_fields.as_str(),
-            update_values = self.update_values.as_str(),
-        )
+        let mut result = String::new();
+
+        result.push_str("INSERT INTO  ");
+        result.push_str(table_name);
+        result.push(' ');
+        result.push_str(self.insert_fields.as_str());
+        result.push_str(" VALUES ");
+        result.push_str(self.insert_values.as_str());
+        result.push_str(" ON CONFLICT ON CONSTRAINT ");
+        result.push_str(pk_name);
+        result.push_str(" DO UPDATE SET (");
+        result.push_str(self.update_fields.as_str());
+        result.push_str(") = (");
+        result.push_str(self.update_values.as_str());
+        result.push_str(")");
+
+        result
     }
 }

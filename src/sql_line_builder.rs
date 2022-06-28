@@ -2,20 +2,24 @@ use crate::SqlValue;
 
 pub struct SqlLineBuilder {
     result: String,
-    separator: String,
+    separator: char,
 }
 
 impl SqlLineBuilder {
-    pub fn new(separator: String) -> Self {
+    pub fn new(separator: char) -> Self {
         Self {
             result: "".to_string(),
-            separator: separator,
+            separator,
         }
+    }
+
+    pub fn has_value(&self) -> bool {
+        self.result.len() > 0
     }
 
     pub fn add(&mut self, value: &str) {
         if self.result.len() > 0 {
-            self.result.push_str(self.separator.as_str());
+            self.result.push(self.separator);
         }
 
         self.result.push_str(value);
@@ -23,7 +27,7 @@ impl SqlLineBuilder {
 
     pub fn add_sql_value(&mut self, sql_value: &SqlValue) {
         if self.result.len() > 0 {
-            self.result.push_str(self.separator.as_str());
+            self.result.push(self.separator);
         }
 
         self.result
