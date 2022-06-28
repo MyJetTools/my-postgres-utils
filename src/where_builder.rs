@@ -1,12 +1,12 @@
 use crate::SqlValue;
 
-pub struct WhereBuilder {
-    operator: String,
+pub struct WhereBuilder<'s> {
+    operator: &'s str,
     values: Vec<(String, SqlValue)>,
 }
 
-impl WhereBuilder {
-    pub fn new(operator: String) -> Self {
+impl<'s> WhereBuilder<'s> {
+    pub fn new(operator: &'s str) -> Self {
         Self {
             operator,
             values: Vec::new(),

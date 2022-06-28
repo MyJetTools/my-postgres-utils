@@ -16,8 +16,9 @@ impl<'s> SqlValueAsString<'s> {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum SqlValue {
-    ByIndex(i32),
+    ByIndex(u32),
     String(String),
     Bool(bool),
     I8(i8),

@@ -1,15 +1,14 @@
-use crate::{sql_line_builder::SqlLineBuilder, NumberedParams};
+use crate::{sql_line_builder::SqlLineBuilder, NumberedParams, SqlValue};
 
-pub struct PosrgresInsertOrUpdateBuilder {
+pub struct PosrgresInsertOrUpdateBuilder<'s> {
     insert_fields: SqlLineBuilder,
     insert_values: SqlLineBuilder,
     update_fields: SqlLineBuilder,
     update_values: SqlLineBuilder,
-
-    numbered_params: NumberedParams,
+    numbered_params: NumberedParams<'s>,
 }
 
-impl PosrgresInsertOrUpdateBuilder {
+impl<'s> PosrgresInsertOrUpdateBuilder<'s> {
     pub fn new() -> Self {
         Self {
             insert_fields: SqlLineBuilder::new(" , ".to_string()),
@@ -21,39 +20,18 @@ impl PosrgresInsertOrUpdateBuilder {
         }
     }
 
-    pub fn append_insert_field(&mut self, field_name: &str) -> bool {
-        /*
-        let (param_no, exists) = self.numbered_params.add_or_get(field_name);
+    pub fn append_insert_field(&mut self, field_name: &str, sql_value: SqlValue) {
+        let sql_value = self.numbered_params.add_or_get(sql_value);
+
         self.insert_fields.add(field_name);
-        self.insert_values.add(format!("${}", param_no).as_str());
-        exists
-         */
-        todo!("Implement");
+        self.insert_values.add_sql_value(&sql_value);
     }
 
-    pub fn append_insert_field_raw(&mut self, field_name: &str, value: &str) {
-        self.insert_fields.add(field_name);
-        self.insert_values.add(format!("'{}'", value).as_str());
-    }
+    pub fn append_update_field(&mut self, field_name: &str, sql_value: SqlValue) {
+        let sql_value = self.numbered_params.add_or_get(sql_value);
 
-    pub fn append_insert_field_raw_no_quotes(&mut self, field_name: &str, value: &str) {
-        self.insert_fields.add(field_name);
-        self.insert_values.add(format!("'{}'", value).as_str());
-    }
-
-    pub fn append_update_field(&mut self, field_name: &str) -> bool {
-        /*
-               let (param_no, exists) = self.numbered_params.add_or_get(field_name);
-               self.update_fields.add(field_name);
-               self.update_values.add(format!("${}", param_no).as_str());
-               exists
-        */
-        todo!("Implement");
-    }
-
-    pub fn append_update_field_raw(&mut self, field_name: &str, value: &str) {
         self.update_fields.add(field_name);
-        self.update_values.add(format!("'{}'", value).as_str());
+        self.update_values.add_sql_value(&sql_value);
     }
 
     pub fn get_sql_line(&self, table_name: &str, pk_name: &str) -> String {

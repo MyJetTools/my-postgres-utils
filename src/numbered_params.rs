@@ -1,34 +1,51 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::SqlValue;
 
-pub struct NumberedParams {
+pub struct NumberedParams<'s> {
     params: HashMap<String, u32>,
     param_no: u32,
+    by_index: BTreeMap<u32, &'s str>,
+    as_vec: Vec<&'s (dyn tokio_postgres::types::ToSql + Sync)>,
 }
 
-impl NumberedParams {
+impl<'s> NumberedParams<'s> {
     pub fn new() -> Self {
         Self {
             params: HashMap::new(),
             param_no: 1,
+            as_vec: Vec::new(),
+            by_index: BTreeMap::new(),
         }
     }
 
-    pub fn add_or_get(&mut self, sql_value: &SqlValue) -> Option<u32> {
-        if let SqlValue::String(value) = sql_value {
-            let mut exists = true;
+    pub fn add_or_get(&mut self, sql_value: SqlValue) -> SqlValue {
+        match sql_value {
+            SqlValue::String(value) => {
+                if !self.params.contains_key(&value) {
+                    let result = self.param_no;
+                    self.params.insert(value.to_string(), result);
+                    self.param_no += 1;
+                    return SqlValue::ByIndex(result);
+                }
 
-            if !self.params.contains_key(value) {
-                let result = self.param_no;
-                self.params.insert(value.to_string(), result);
-                self.param_no += 1;
-                return Some(result);
+                return SqlValue::ByIndex(*self.params.get(&value).unwrap());
             }
+            _ => {
+                return sql_value.clone();
+            }
+        }
+    }
 
-            return Some(*self.params.get(value).unwrap());
+    pub fn build_params(&'s mut self) -> &'s [&'s (dyn tokio_postgres::types::ToSql + Sync)] {
+        for (key, value) in &self.params {
+            self.by_index.insert(*value, key);
         }
 
-        None
+        for value in self.by_index.values() {
+            self.as_vec.push(value);
+        }
+
+        self.as_vec.as_slice()
     }
 }
