@@ -26,7 +26,7 @@ impl<'s> DeleteBuilder<'s> {
         result
     }
 
-    pub fn get_values_data(&'s mut self) -> &'s [&'s (dyn tokio_postgres::types::ToSql + Sync)] {
+    pub fn get_values_data(&mut self) -> &'s [&(dyn tokio_postgres::types::ToSql + Sync)] {
         self.numbered_params.build_params()
     }
 }
