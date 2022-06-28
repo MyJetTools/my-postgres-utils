@@ -38,6 +38,7 @@ impl<'s> BulkInsertOrUpdateBuilder<'s> {
 
     pub fn build(&self, table_name: &str, pk_name: &str) -> String {
         let mut result = String::new();
+        result.push_str("BEGIN;");
 
         for line in &self.lines {
             line.build(&mut result, table_name, pk_name);
@@ -48,6 +49,8 @@ impl<'s> BulkInsertOrUpdateBuilder<'s> {
             self.current.build(&mut result, table_name, pk_name);
             result.push(';');
         }
+
+        result.push_str("COMMIT;");
 
         result
     }
