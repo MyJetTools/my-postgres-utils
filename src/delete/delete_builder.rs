@@ -4,7 +4,7 @@ use super::DeleteInner;
 
 pub struct DeleteBuilder<'s> {
     numbered_params: NumberedParams<'s>,
-    inner: DeleteInner<'s>,
+    inner: DeleteInner,
 }
 
 impl<'s> DeleteBuilder<'s> {

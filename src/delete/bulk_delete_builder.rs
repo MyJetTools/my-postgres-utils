@@ -4,8 +4,8 @@ use super::DeleteInner;
 
 pub struct BulkDeleteBuilder<'s> {
     numbered_params: NumberedParams<'s>,
-    inners: Vec<DeleteInner<'s>>,
-    current: DeleteInner<'s>,
+    inners: Vec<DeleteInner>,
+    current: DeleteInner,
 }
 
 impl<'s> BulkDeleteBuilder<'s> {
@@ -24,7 +24,7 @@ impl<'s> BulkDeleteBuilder<'s> {
         }
     }
 
-    pub fn add_where_field(&'s mut self, field_name: &str, sql_value: SqlValue) {
+    pub fn add_where_field(&mut self, field_name: &str, sql_value: SqlValue) {
         self.current
             .add_where_field(&mut self.numbered_params, field_name, sql_value);
     }
