@@ -37,7 +37,7 @@ impl<'s> NumberedParams<'s> {
         }
     }
 
-    pub fn build_params(&'s mut self) -> &'s [&'s (dyn tokio_postgres::types::ToSql + Sync)] {
+    pub fn build_params(&'s mut self) -> &'s [&(dyn tokio_postgres::types::ToSql + Sync)] {
         for (key, value) in &self.params {
             self.by_index.insert(*value, key);
         }
