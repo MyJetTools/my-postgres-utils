@@ -15,7 +15,7 @@ impl IndexedValuesGenerator {
         }
     }
 
-    fn get_nexy_index(&mut self) -> u32 {
+    fn get_next_index(&mut self) -> u32 {
         self.index_no += 1;
         self.index_no
     }
@@ -26,7 +26,7 @@ impl IndexedValuesGenerator {
                 return Some(*index);
             }
 
-            let next_index = self.get_nexy_index();
+            let next_index = self.get_next_index();
             self.string_values.insert(value.to_string(), next_index);
             return Some(next_index);
         }
