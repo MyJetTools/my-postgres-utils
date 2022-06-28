@@ -35,7 +35,7 @@ impl<'s> BulkInsertBuilder<'s> {
         self.current_value.add_sql_value(&sql_value);
     }
 
-    pub fn get_sql_line(&mut self, table_name: &str) -> String {
+    pub fn build(&mut self, table_name: &str) -> String {
         let mut result = format!(
             "INSERT INTO {table_name} ({fields}) VALUES ",
             fields = self.fields.as_str(),
