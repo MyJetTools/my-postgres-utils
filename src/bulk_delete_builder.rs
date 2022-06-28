@@ -40,7 +40,7 @@ impl<'s> BulkDeleteBuilder<'s> {
         self.get_current_where_builder().add(field_name, sql_value);
     }
 
-    pub fn get_sql_line(&'s mut self, table_name: &str) -> String {
+    pub fn build(&'s mut self, table_name: &str) -> String {
         let old_value = std::mem::replace(&mut self.current_where_bulder, None);
 
         if let Some(old_line) = old_value {
