@@ -57,7 +57,9 @@ impl SqlValue {
             SqlValue::U64(value) => SqlValueAsString::String(format!("{}", value)),
             SqlValue::ISize(value) => SqlValueAsString::String(format!("{}", value)),
             SqlValue::USize(value) => SqlValueAsString::String(format!("{}", value)),
-            SqlValue::DateTime(value) => SqlValueAsString::String(value.to_rfc3339()),
+            SqlValue::DateTime(value) => {
+                SqlValueAsString::String(format!("'{}'", value.to_rfc3339()))
+            }
         }
     }
 }
